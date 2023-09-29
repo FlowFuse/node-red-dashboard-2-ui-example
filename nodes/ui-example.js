@@ -15,6 +15,13 @@ module.exports = function(RED) {
 
             config.type = 'ui-example'
             config.templateScope = 'local'
+            config.head = [{
+                type: 'script',
+                data: {
+                    defer: 'defer',
+                    src: 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js'
+                }
+            }]
             config.format = html
 
             // methods that will be available to the widget in the Dashboard
