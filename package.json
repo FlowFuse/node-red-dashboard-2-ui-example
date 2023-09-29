@@ -1,0 +1,40 @@
+{
+    "name": "@flowforge/node-red-dashboard-third-party",
+    "version": "0.0.1",
+    "description": "A basic example of a third-party node that integrates with Node-RED Dashboard 2.0",
+    "author": {
+        "name": "Joe Pavitt",
+        "url": "https://github.com/joepavitt"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/flowforge/node-red-dashboard-3rd-party.git"
+    },
+    "files": [
+        "dist/*",
+        "nodes/*"
+    ],
+    "license": "Apache-2.0",
+    "keywords": [
+        "node-red"
+    ],
+    "node-red": {
+        "version": ">=3.0.0",
+        "nodes": {
+            "ui-example": "nodes/ui-example.js"
+        }
+    },
+    "dependencies": { },
+    "devDependencies": {
+
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead",
+        "not ie 11"
+    ],
+    "engines": {
+        "node": ">=14"
+    }
+}

@@ -1,0 +1,31 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ui-example', {
+        category: RED._('@flowforge/node-red-dashboard/ui-base:ui-base.label.category'),
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            group: { type: 'ui-group', required: true },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "file.svg",
+        label: function() {
+            return this.name || "ui-example";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="ui-example">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-group"><i class="fa fa-table"></i> Group</label>
+        <input type="text" id="node-input-group">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="ui-example">
+    <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>
