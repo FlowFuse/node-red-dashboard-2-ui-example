@@ -12,7 +12,8 @@
     },
     "files": [
         "dist/*",
-        "nodes/*"
+        "nodes/*",
+        "ui/*"
     ],
     "license": "Apache-2.0",
     "keywords": [
