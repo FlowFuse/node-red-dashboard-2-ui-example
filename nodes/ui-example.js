@@ -10,9 +10,6 @@ module.exports = function(RED) {
         var node = this;
 
         fs.readFile(path.join(__dirname, '../ui', 'UIExample.vue'), 'utf8', (err, html) => {
-            console.error('err', err)
-            console.log('widget', html)
-
             config.type = 'ui-example'
             config.templateScope = 'local'
             config.head = [{
@@ -25,12 +22,12 @@ module.exports = function(RED) {
             config.format = html
 
             // methods that will be available to the widget in the Dashboard
-            config.onMounted = methods.onMounted.toString()
-            config.onInput = methods.onInput.toString()
+            config.onMounted = methods.onMounted
+            config.onInput = methods.onInput
 
             // methods that will be available to the widget in the Dashboard
             config.methods = {
-                test: methods.test.toString()
+                test: methods.test
             }     
     
             // which group are we rendering this widget
@@ -47,6 +44,7 @@ module.exports = function(RED) {
                 onSocket: {
                     'my-custom-event': function (id, msg) {
                         console.log('my-custom-event', id, msg)
+                        node.send(msg)
                     }
                 }
             }

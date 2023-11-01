@@ -16,7 +16,8 @@
     ],
     "license": "Apache-2.0",
     "keywords": [
-        "node-red"
+        "node-red",
+        "node-red-dashboard-2"
     ],
     "node-red": {
         "version": ">=3.0.0",
@@ -24,9 +25,16 @@
             "ui-example": "nodes/ui-example.js"
         }
     },
-    "dependencies": { },
+    "node-red-dashboard-2": {
+        "version": "1.0.0",
+        "widgets": {
+            "ui-example": {
+                "source": "/ui/UIExample.vue"
+            }
+        }
+    },
     "devDependencies": {
-
+        "@flowfuse/node-red-dashboard": "file:../flowforge-nr-dashboard"
     },
     "browserslist": [
         "> 1%",
