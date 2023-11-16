@@ -11,7 +11,7 @@ export default defineConfig({
         minify: false,
         lib: {
             entry: resolve(__dirname, 'ui/index.js'),
-            name: 'ExampleNode',
+            name: 'ui-example',
             formats: ['umd', 'es'],
             fileName: (format, entryName) => `node-red-dashboard.${format}.js`
         },
