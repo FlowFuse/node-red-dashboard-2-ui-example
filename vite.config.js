@@ -1,31 +1,29 @@
-import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+
+import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue()],
     build: {
-        outDir: './resources',
+        // Don't minify the library
+        minify: false,
         lib: {
-            // Could also be a dictionary or array of multiple entry points
             entry: resolve(__dirname, 'ui/index.js'),
-            name: 'UIExample',
-            // the proper extensions will be added
-            fileName: 'ui-example',
-          },
-          rollupOptions: {
-            // make sure to externalize deps that shouldn't be bundled
-            // into your library
+            name: 'ExampleNode',
+            formats: ['umd', 'es'],
+            fileName: (format, entryName) => `node-red-dashboard.${format}.js`
+        },
+        rollupOptions: {
+            // Don't rollup the Vue dependency into the build
             external: ['vue'],
             output: {
-              // Provide global variables to use in the UMD build
-              // for externalized deps
-              globals: {
-                vue: 'Vue',
-              },
-            },
-          }
-    },
-    base: '/dashboard/'
+                // Provide global variables to use in the UMD build
+                globals: {
+                    vue: 'Vue'
+                }
+            }
+        }
+    }
 })
