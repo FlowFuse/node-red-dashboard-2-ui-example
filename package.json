@@ -22,11 +22,11 @@
         }
     ],
     "exports": {
-        "import": "./dist/ui-example.esm.js",
-        "require": "./dist/ui-example.umd.js"
+        "import": "./resources/ui-example.esm.js",
+        "require": "./resources/ui-example.umd.js"
     },
     "files": [
-        "dist/*",
+        "resources/*",
         "nodes/*"
     ],
     "scripts": {
@@ -68,7 +68,7 @@
         "version": "1.0.0",
         "widgets": {
             "ui-example": {
-                "source": "dist/ui-example.umd.js",
+                "output": "ui-example.umd.js",
                 "component": "UIExample"
             }
         }

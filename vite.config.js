@@ -23,6 +23,9 @@ export default defineConfig({
             fileName: (format, entryName) => `${libraryName}.${format}.js`
         },
 
+        // Utilise Node-RED's handling of /resources folder for the build output
+        outDir: './resources',
+
         // Declare dependencies that shouldn't be bundled into the library
         rollupOptions: {
             // Don't rollup the Vue dependency into the build
