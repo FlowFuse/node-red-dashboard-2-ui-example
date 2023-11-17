@@ -23,7 +23,8 @@ export default {
     inject: ['$socket'],
     props: {
         id: { type: String, required: true },
-        props: { type: Object, default: () => ({}) }
+        props: { type: Object, default: () => ({}) },
+        state: { type: Object, default: () => ({ enabled: false, visible: false }) }
     },
     setup (props) {
         console.info('UIExample setup with:', props)
