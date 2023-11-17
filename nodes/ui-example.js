@@ -36,8 +36,12 @@ module.exports = function (RED) {
                 console.debug(msg)
             },
             onSocket: {
-                'my-custom-event': function (id, msg) {
-                    console.info('my-custom-event', id, msg)
+                'my-custom-event': function (conn, id, msg) {
+                    console.info('"my-custom-event" received:', conn.id, id, msg)
+                    console.info('conn.id:', conn.id)
+                    console.info('id:', id)
+                    console.info('msg:', msg)
+                    console.info('node.id:', node.id)
                     node.send(msg)
                 }
             }

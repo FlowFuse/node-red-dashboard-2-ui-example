@@ -29,7 +29,7 @@ export default defineConfig({
         // Declare dependencies that shouldn't be bundled into the library
         rollupOptions: {
             // Don't rollup the Vue dependency into the build
-            external: ['vue'],
+            external: ['vue', 'vuex'],
             output: {
                 // Provide global variables to use in the UMD build
                 globals: {
