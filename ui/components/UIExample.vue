@@ -44,6 +44,12 @@
         </p>
         <v-btn @click="test()">Send 'my-custom-event'</v-btn>
 
+        <h2>Data Retention &amp; VueX Stores</h2>
+        <p>Dashboard 2.0 has a built-in VueX datastore. This can be used to store (and retrieve) the latest received messages.</p>
+        <p>Note: the vuex store is cleared on refresh of a screen, at which point, data will be loaded from the Node-RED datastore, should it be present.</p>
+        <p>Send a message to this node in order to see the value here:</p>
+        <pre>{{ messages && messages[id] ? messages[id] : 'No Data' }}</pre>
+
         <!-- Note: We can use any Vuetify Components by default -->
         <h2>Styling with Vuetify &amp; CSS</h2>
         <p>
@@ -77,7 +83,7 @@
 <script>
 import toTitleCase from 'to-title-case'
 import { markRaw } from 'vue'
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
     name: 'UIExample',
@@ -108,16 +114,25 @@ export default {
     computed: {
         titleCase () {
             return toTitleCase(this.input.title)
-        }
-        // ...mapState('data', ['messages'])
+        },
+        ...mapState('data', ['messages'])
     },
     mounted () {
+        // load the latest message from the Node-RED datastore when this widget is loaded
+        this.$socket.on('widget-load:' + this.id, (msg) => {
+            // store it in our vuex store so that we have it saved as we navigate around
+            this.$store.commit('data/bind', {
+                widgetId: this.id,
+                msg
+            })
+        })
+        // store the latest message in our client-side vuex store when we receive a new message
         this.$socket.on('msg-input:' + this.id, (msg) => {
             // store the latest message in our vuex store
-            // this.$store.commit('data/bind', {
-            //     widgetId: this.id,
-            //     msg
-            // })
+            this.$store.commit('data/bind', {
+                widgetId: this.id,
+                msg
+            })
         })
     },
     unmounted () {

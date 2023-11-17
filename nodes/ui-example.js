@@ -34,6 +34,8 @@ module.exports = function (RED) {
             onInput: function (msg, send, done) {
                 console.info('on input')
                 console.debug(msg)
+                // store the latest value in our Node-RED datastore
+                // datastore.save(widgetNode.id, msg)
             },
             onSocket: {
                 'my-custom-event': function (conn, id, msg) {

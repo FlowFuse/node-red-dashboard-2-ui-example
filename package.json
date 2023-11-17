@@ -43,7 +43,8 @@
     },
     "dependencies": {
         "to-title-case": "^1.0.0",
-        "vue": "^3.3.8"
+        "vue": "^3.3.8",
+        "vuex": "^4.1.0"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^4.5.0",
