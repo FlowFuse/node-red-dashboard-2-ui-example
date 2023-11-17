@@ -31,14 +31,15 @@
     ],
     "scripts": {
         "build": "vite build",
-        "dev": "vite",
+        "build:dev": "NODE_ENV=development vite build",
+        "dev": "NODE_ENV=development vite build --watch",
+        "dev:prod": "vite build --watch",
         "lint": "npm run lint:js && npm run lint:package",
         "lint:fix": "npm run lint:js:fix && npm run lint:package:fix",
         "lint:js": "eslint --ext .js,.vue,.cjs,.mjs .",
         "lint:js:fix": "yarn lint:js --fix",
         "lint:package": "sort-package-json --check 'package.json'",
-        "lint:package:fix": "sort-package-json 'package.json'",
-        "preview": "vite preview"
+        "lint:package:fix": "sort-package-json 'package.json'"
     },
     "dependencies": {
         "to-title-case": "^1.0.0",
