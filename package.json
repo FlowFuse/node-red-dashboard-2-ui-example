@@ -22,8 +22,8 @@
         }
     ],
     "exports": {
-        "import": "./dist/node-red-dashboard.es.js",
-        "require": "./dist/node-red-dashboard.umd.js"
+        "import": "./dist/ui-example.esm.js",
+        "require": "./dist/ui-example.umd.js"
     },
     "files": [
         "dist/*",
@@ -51,7 +51,8 @@
         "eslint-plugin-import": "^2.29.0",
         "eslint-plugin-n": "^16.3.1",
         "eslint-plugin-vue": "^9.18.1",
-        "vite": "^4.5.0"
+        "vite": "^4.5.0",
+        "vite-plugin-css-injected-by-js": "^3.3.0"
     },
     "engines": {
         "node": ">=14"
@@ -66,8 +67,8 @@
         "version": "1.0.0",
         "widgets": {
             "ui-example": {
-                "source": "dist/node-red-dashboard.umd.js",
-                "component":  "UIExample"
+                "source": "dist/ui-example.umd.js",
+                "component": "UIExample"
             }
         }
     }
