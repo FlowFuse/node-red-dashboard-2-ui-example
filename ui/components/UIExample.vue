@@ -1,17 +1,20 @@
 <template>
-    <h1>Widget ID: {{ id }}</h1>
-    <p @click="test({ hello: 'world' })">This is a 3rd Party Widget</p>
-    <ul>
-        <li v-for="(value, key, index) in props" :key="key">
-            <label>#{{ index }} {{ key }}: {{ value }}</label>
-        </li>
-    </ul>
-    <p>
-        It supports using packages from npm, such as <code>to-title-case</code>:
-    </p>
-    <p>
-        <input v-model="input.title" type="text"> => <span>{{ title }}</span>
-    </p>
+    <!-- Component must be wrapped in a block so props such as className and style can be passed in from parent -->
+    <div className="ui-example-wrapper">
+        <h1>Widget ID: {{ id }}</h1>
+        <p @click="test({ hello: 'world' })">This is a 3rd Party Widget</p>
+        <ul>
+            <li v-for="(value, key, index) in props" :key="key">
+                <label>#{{ index }} {{ key }}: {{ value }}</label>
+            </li>
+        </ul>
+        <p>
+            It supports using packages from npm, such as <code>to-title-case</code>:
+        </p>
+        <p>
+            <input v-model="input.title" type="text"> => <span>{{ title }}</span>
+        </p>
+    </div>
 </template>
 
 <script>
@@ -59,3 +62,30 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+/* CSS is auto scoped, but using named classes is still recommended */
+.ui-example-wrapper {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid black;
+}
+
+h1 {
+    margin-bottom: 10px
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+ul li {
+   list-style-type: circle;
+   list-style-position: inside;
+   margin-left: 15px;
+}
+
+input {
+    border: 1px solid black;
+}
+</style>
