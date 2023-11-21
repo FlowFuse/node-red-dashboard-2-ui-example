@@ -4,38 +4,19 @@ module.exports = function (RED) {
 
         const node = this
 
-        /*
-        config.type = 'ui-example'
-        config.templateScope = 'local'
-        config.head = [{
-            type: 'script',
-            data: {
-                defer: 'defer',
-                src: 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js'
-            }
-        }]
-        // config.format = html
-
-        // methods that will be available to the widget in the Dashboard
-        // config.onMounted = methods.onMounted
-        // config.onInput = methods.onInput
-
-        // methods that will be available to the widget in the Dashboard
-        /* config.methods = {
-            test: methods.test
-        } */
-
         // which group are we rendering this widget
         const group = RED.nodes.getNode(config.group)
+
+        const base = group.getBase()
 
         // server-side event handlers
         const evts = {
             onAction: true,
             onInput: function (msg, send, done) {
-                console.info('on input')
-                console.debug(msg)
                 // store the latest value in our Node-RED datastore
-                // datastore.save(widgetNode.id, msg)
+                base.stores.data.save(node.id, msg)
+                // send it to any connected nodes in Node-RED
+                send(msg)
             },
             onSocket: {
                 'my-custom-event': function (conn, id, msg) {
@@ -44,6 +25,7 @@ module.exports = function (RED) {
                     console.info('id:', id)
                     console.info('msg:', msg)
                     console.info('node.id:', node.id)
+                    // emit a msg in Node-RED from this node
                     node.send(msg)
                 }
             }

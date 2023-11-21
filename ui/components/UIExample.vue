@@ -6,9 +6,10 @@
         <!-- Note: We can use any Vuetify Components by default -->
         <h2>Using Vuetify Components</h2>
         <p>
-            Vuetify is included by default, so we can include any of their components.
-            Here we have a <code>v-btn</code> that will open a "Hello World" alert.
+            <a href="https://vuetifyjs.com/en/components/all/#containment" target="_blank">Vuetify</a> is included by default, so we can include any of their components.
+            Here we have a button that will open a "Hello World" alert:
         </p>
+        <pre>&lt;v-btn @click="alert('Hello World')"&gt;Alert "Hello World"&lt;/v-btn&gt;</pre>
         <v-btn @click="alert('Hello World')">Alert "Hello World"</v-btn>
 
         <h2>Accessing Properties</h2>
@@ -49,6 +50,7 @@
         <p>Note: the vuex store is cleared on refresh of a screen, at which point, data will be loaded from the Node-RED datastore, should it be present.</p>
         <p>Send a message to this node in order to see the value here:</p>
         <pre>{{ messages && messages[id] ? messages[id] : 'No Data' }}</pre>
+        <p>Note that it persists, even after refresh. This is because, in our <code>onInput</code> event handler in our <code>ui-example.js</code> file, we store the message in the Node-RED datastore.</p>
 
         <!-- Note: We can use any Vuetify Components by default -->
         <h2>Styling with Vuetify &amp; CSS</h2>
@@ -118,22 +120,23 @@ export default {
         ...mapState('data', ['messages'])
     },
     mounted () {
-        // load the latest message from the Node-RED datastore when this widget is loaded
         this.$socket.on('widget-load:' + this.id, (msg) => {
-            // store it in our vuex store so that we have it saved as we navigate around
+            // load the latest message from the Node-RED datastore when this widget is loaded
+            // storing it in our vuex store so that we have it saved as we navigate around
             this.$store.commit('data/bind', {
                 widgetId: this.id,
                 msg
             })
         })
-        // store the latest message in our client-side vuex store when we receive a new message
         this.$socket.on('msg-input:' + this.id, (msg) => {
-            // store the latest message in our vuex store
+            // store the latest message in our client-side vuex store when we receive a new message
             this.$store.commit('data/bind', {
                 widgetId: this.id,
                 msg
             })
         })
+        // tell Node-RED that we're loading a new instance of this widget
+        this.$socket.emit('widget-load', this.id)
     },
     unmounted () {
         /* Make sure, any events you subscribe to on SocketIO are unsubscribed to here */
