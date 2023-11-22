@@ -1,64 +1,43 @@
-const fs = require('fs')
-const path = require('path')
+module.exports = function (RED) {
+    function UIExampleNode (config) {
+        RED.nodes.createNode(this, config)
 
-// import our client-side functions
-const methods = require('../ui/methods')
+        const node = this
 
-module.exports = function(RED) {
-    function UIExampleNode(config) {
-        RED.nodes.createNode(this, config);
-        var node = this;
+        // which group are we rendering this widget
+        const group = RED.nodes.getNode(config.group)
 
-        fs.readFile(path.join(__dirname, '../ui', 'UIExample.vue'), 'utf8', (err, html) => {
-            console.error('err', err)
-            console.log('widget', html)
+        const base = group.getBase()
 
-            config.type = 'ui-example'
-            config.templateScope = 'local'
-            config.head = [{
-                type: 'script',
-                data: {
-                    defer: 'defer',
-                    src: 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js'
-                }
-            }]
-            config.format = html
-
-            // methods that will be available to the widget in the Dashboard
-            config.onMounted = methods.onMounted.toString()
-            config.onInput = methods.onInput.toString()
-
-            // methods that will be available to the widget in the Dashboard
-            config.methods = {
-                test: methods.test.toString()
-            }     
-    
-            // which group are we rendering this widget
-            const group = RED.nodes.getNode(config.group)
-            
-            // server-side event handlers
-            const evts = {
-                onAction: true,
-                onInput: function (msg, send, done) {
-                    console.log('on input')
-                    console.log(msg)
-                    // send(msg)
-                },
-                onSocket: {
-                    'my-custom-event': function (id, msg) {
-                        console.log('my-custom-event', id, msg)
-                    }
+        // server-side event handlers
+        const evts = {
+            onAction: true,
+            onInput: function (msg, send, done) {
+                // store the latest value in our Node-RED datastore
+                base.stores.data.save(node.id, msg)
+                // send it to any connected nodes in Node-RED
+                send(msg)
+            },
+            onSocket: {
+                'my-custom-event': function (conn, id, msg) {
+                    console.info('"my-custom-event" received:', conn.id, id, msg)
+                    console.info('conn.id:', conn.id)
+                    console.info('id:', id)
+                    console.info('msg:', msg)
+                    console.info('node.id:', node.id)
+                    // emit a msg in Node-RED from this node
+                    node.send(msg)
                 }
             }
-    
-            // inform the dashboard UI that we are adding this node
-            if (group) {
-                group.register(node, config, evts)
-            } else {
-                node.error('No group configured')
-            }
-        })
+        }
 
+        // inform the dashboard UI that we are adding this node
+        if (group) {
+            group.register(node, config, evts)
+        } else {
+            node.error('No group configured')
+        }
     }
-    RED.nodes.registerType("ui-example", UIExampleNode);
+
+    RED.nodes.registerType('ui-example', UIExampleNode)
 }

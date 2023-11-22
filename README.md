@@ -1,6 +1,6 @@
 # Example Node for Node-RED Dashboard
 
-This repository contains an example, third-party, node for the Node-RED Dashboard. You can read our contribution guide for details on developing your own Dashboard 2.0 integrations & widgets.
+This repository contains an example, third-party, node for the Node-RED Dashboard. You can read our [contribution guide](https://dashboard.flowfuse.com/contributing/widgets/third-party.html) for details on developing your own Dashboard 2.0 integrations & widgets.
 
 This project is intended to be used as a starting point for creating your own custom nodes that can integrate directly with [Node-RED Dashboard 2.0](https://github.com/FlowFuse/flowforge-nr-dashboard).
 

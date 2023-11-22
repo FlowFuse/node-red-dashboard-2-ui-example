@@ -1,40 +1,77 @@
 {
-    "name": "@flowforge/node-red-dashboard-third-party",
-    "version": "0.0.1",
+    "name": "@flowfuse/node-red-dashboard-2-ui-example",
+    "version": "1.0.0",
     "description": "A basic example of a third-party node that integrates with Node-RED Dashboard 2.0",
-    "author": {
-        "name": "Joe Pavitt",
-        "url": "https://github.com/joepavitt"
-    },
+    "keywords": [
+        "node-red",
+        "node-red-dashboard-2"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/flowforge/node-red-dashboard-3rd-party.git"
     },
+    "license": "Apache-2.0",
+    "author": {
+        "name": "Joe Pavitt",
+        "url": "https://github.com/joepavitt"
+    },
+    "contributors": [
+        {
+            "name": "Pez Cuckow",
+            "url": "https://github.com/pezmc"
+        }
+    ],
+    "exports": {
+        "import": "./resources/ui-example.esm.js",
+        "require": "./resources/ui-example.umd.js"
+    },
     "files": [
-        "dist/*",
+        "resources/*",
         "nodes/*"
     ],
-    "license": "Apache-2.0",
-    "keywords": [
-        "node-red"
-    ],
+    "scripts": {
+        "build": "vite build",
+        "build:dev": "NODE_ENV=development vite build",
+        "dev": "NODE_ENV=development vite build --watch",
+        "dev:prod": "vite build --watch",
+        "lint": "npm run lint:js && npm run lint:package",
+        "lint:fix": "npm run lint:js:fix && npm run lint:package:fix",
+        "lint:js": "eslint --ext .js,.vue,.cjs,.mjs .",
+        "lint:js:fix": "yarn lint:js --fix",
+        "lint:package": "sort-package-json --check 'package.json'",
+        "lint:package:fix": "sort-package-json 'package.json'"
+    },
+    "dependencies": {
+        "to-title-case": "^1.0.0",
+        "vue": "^3.3.8",
+        "vuex": "^4.1.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^4.5.0",
+        "eslint": "^8.53.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.29.0",
+        "eslint-plugin-n": "^16.3.1",
+        "eslint-plugin-vue": "^9.18.1",
+        "vite": "^5.0.0",
+        "vite-plugin-css-injected-by-js": "^3.3.0"
+    },
+    "engines": {
+        "node": ">=14"
+    },
     "node-red": {
         "version": ">=3.0.0",
         "nodes": {
             "ui-example": "nodes/ui-example.js"
         }
     },
-    "dependencies": { },
-    "devDependencies": {
-
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not dead",
-        "not ie 11"
-    ],
-    "engines": {
-        "node": ">=14"
+    "node-red-dashboard-2": {
+        "version": "1.0.0",
+        "widgets": {
+            "ui-example": {
+                "output": "ui-example.umd.js",
+                "component": "UIExample"
+            }
+        }
     }
 }
