@@ -1,6 +1,6 @@
 {
-    "name": "@flowforge/node-red-dashboard-third-party",
-    "version": "0.0.1",
+    "name": "@flowfuse/node-red-dashboard-2-ui-example",
+    "version": "1.0.0",
     "description": "A basic example of a third-party node that integrates with Node-RED Dashboard 2.0",
     "keywords": [
         "node-red",

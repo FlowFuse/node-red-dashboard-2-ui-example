@@ -6,7 +6,7 @@ import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 // Set to this to the name of this collection of components
 // This must match node-red-dashboard-2.widgets[libraryName] in package.json
-const libraryName = 'ui-example'
+const LIBRARY_NAME = 'ui-example'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,9 +18,9 @@ export default defineConfig({
         // Configure build as a UMD library
         lib: {
             entry: resolve(__dirname, 'ui/index.js'),
-            name: libraryName,
+            name: LIBRARY_NAME,
             formats: ['umd'],
-            fileName: (format, entryName) => `${libraryName}.${format}.js`
+            fileName: (format, entryName) => `${LIBRARY_NAME}.${format}.js`
         },
 
         // Utilise Node-RED's handling of /resources folder for the build output
