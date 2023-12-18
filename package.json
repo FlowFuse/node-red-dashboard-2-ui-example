@@ -26,8 +26,10 @@
         "require": "./resources/ui-example.umd.js"
     },
     "files": [
-        "resources/*",
-        "nodes/*"
+        "dist/*",
+        "nodes/*",
+        "ui/*",
+        "resources/*"
     ],
     "scripts": {
         "build": "vite build",
