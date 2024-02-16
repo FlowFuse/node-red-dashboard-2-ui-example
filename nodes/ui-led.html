@@ -1,0 +1,205 @@
+<script type="text/javascript">
+
+    function generateStateRow (i, state) {
+        const color = state.color
+        const value = state.value
+        const valueType = state.valueType
+
+        const container = $('<li/>', { style: 'background: var(--red-ui-secondary-background, #fff); margin:0; padding:8px 0px 0px; border-bottom: 1px solid var(--red-ui-form-input-border-color, #ccc);' })
+        const row = $('<div/>', {class: 'form-row-flex'}).appendTo(container)
+        $('<div/>', { style: 'padding-top:5px; padding-left:175px;' }).appendTo(container)
+        $('<div/>', { style: 'padding-top:5px; padding-left:120px;' }).appendTo(container)
+
+        $('<i style="color: var(--red-ui-form-text-color, #eee); cursor:move; margin-left:3px;" class="node-input-state-handle fa fa-bars"></i>').appendTo(row)
+        
+        // color picker
+        $('<input/>', { class: 'node-input-state-color', type: 'color', style: 'margin-left:7px; width: 50px;', placeholder: 'Color', value: color }).appendTo(row)
+        
+        // value field
+        const valueFieldContainer = $('<div/>', {
+            style: 'min-width:30%; flex-grow:1; margin-left:10px;'
+        }).appendTo(row)
+        const valueField = $('<input/>', { class: 'node-input-state-value', type: 'text', style: 'width: 100%;', placeholder: 'Value', value: value }).appendTo(valueFieldContainer)
+        const valueTypeField = $('<input/>', { class: 'node-input-state-valueType', type: 'hidden', value: valueType }).appendTo(valueFieldContainer)
+
+        valueField.typedInput({
+            default: 'bool',
+            typeField: valueTypeField,
+            types: ['str', 'num', 'bool', 'json', 'bin']
+        })
+
+        const finalSpan = $('<span/>', { style: 'float:right; margin-right:8px;' }).appendTo(row)
+        const deleteButton = $('<a/>', { href: '#', class: 'editor-button editor-button-small', style: 'margin-top:7px; margin-left:5px;' }).appendTo(finalSpan)
+        $('<i/>', { class: 'fa fa-remove' }).appendTo(deleteButton)
+
+        deleteButton.click(function () {
+            container.css({ background: 'var(--red-ui-secondary-background-inactive, #fee)' })
+            container.fadeOut(300, function () {
+                $(this).remove()
+            })
+        })
+
+        $('#node-input-states-container').append(container)
+    }
+
+    RED.nodes.registerType('ui-led', {
+        category: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.label.category'),
+        color: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.colors.medium'),
+        defaults: {
+            name: { value: "" },
+            group: { type: 'ui-group', required: true },
+            width: {
+                value: 0,
+                validate: function (v) {
+                    const width = v || 0
+                    const currentGroup = $('#node-input-group').val() || this.group
+                    const groupNode = RED.nodes.node(currentGroup)
+                    const valid = !groupNode || +width <= +groupNode.width
+                    $('#node-input-size').toggleClass('input-error', !valid)
+                    return valid
+                }
+            },
+            height: { value: 0 },
+            label: { value: '' },
+            labelPlacement: { value: 'left' },
+            labelAlignment: { value: 'left' },
+            states: {
+                required: true,
+                value: [
+                    {
+                        color: '#FF0000',
+                        value: false,
+                        valueType: 'bool'
+                    },
+                    {
+                        color: '#00FF00',
+                        value: true,
+                        valueType: 'bool'
+                    }
+                ]
+            },
+            allowColorForValueInMessage: { value: false },
+            shape: { value: 'circle' },
+            showBorder: { value: true },
+            showGlow: { value: true }
+        },
+        inputs: 1,
+        outputs: 0,
+        icon: "font-awesome/fa-lightbulb-o",
+        label: function() {
+            return this.name || "ui-led";
+        },
+        oneditprepare: function () {
+            $('#node-input-size').elementSizer({
+                width: '#node-input-width',
+                height: '#node-input-height',
+                group: '#node-input-group'
+            });
+
+            // update the colorForValue list
+            // setupColorForValue(this)
+
+            console.log(this.states)
+
+            $('#node-input-add-state').click(function () {
+                generateStateRow($('#node-input-states-container').children().length + 1, {})
+                $('#node-input-states-container-div').scrollTop($('#node-input-states-container-div').get(0).scrollHeight)
+            })
+
+            $('#node-input-states-container').sortable({
+                axis: 'y',
+                handle: '.node-input-option-handle',
+                cursor: 'move'
+            })
+
+            for (let i = 0; i < this.states.length; i++) {
+                const state = this.states[i]
+                generateStateRow(i + 1, state)
+            }
+        },
+        oneditsave: function () {
+            const states = $('#node-input-states-container').children()
+
+            const node = this
+            node.states = []
+            states.each(function (i) {
+                const state = $(this)
+                const s = {
+                    value: state.find('.node-input-state-value').val(),
+                    valueType: state.find('.node-input-state-valueType').val(),
+                    color: state.find('.node-input-state-color').val()
+                }
+                node.states.push(s)
+            })
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="ui-led">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-group"><i class="fa fa-table"></i> Group</label>
+        <input type="text" id="node-input-group">
+    </div>
+    <div class="form-row">
+        <label><i class="fa fa-object-group"></i> <span data-i18n="ui-led.label.size"></label>
+        <input type="hidden" id="node-input-width">
+        <input type="hidden" id="node-input-height">
+        <button class="editor-button" id="node-input-size"></button>
+    </div>
+    <h3>Label Styling</h3>
+    <div class="form-row">
+        <label for="node-input-label"><i class="icon-tag"></i>  <span data-i18n="ui-led.label.text"></span></label>
+        <input type="text" id="node-input-label" data-i18n="[placeholder]editor:editor.defaultLabel">
+    </div>
+    <div class="form-row-flex" style="gap: 100px;">
+        <div class="form-row">
+            <label for="node-input-labelPlacement"><i class="icon-tag"></i> Placement</label>
+            <select id="node-input-labelPlacement" style="width: 75px;">
+                <option value="left">left</option>
+                <option value="right">right</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <label for="node-input-labelAlignment"><i class="icon-tag"></i> Alignment</label>
+            <select id="node-input-labelAlignment" style="width: 75px;">
+                <option value="flex-start">left</option>
+                <option value="center">center</option>
+                <option value="flex-end">right</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-shape"><i class="icon-tag"></i> Shape</label>
+        <select id="node-input-shape" style="width: 75px;">
+            <option value="circle">circle</option>
+            <option value="square">square</option>
+        </select>
+    </div>
+    <div class="form-row" style="display: flex; flex-direction: row; width: 100%;">
+        <div style="flex-grow: 1; display: flex; flex-direction: row;">
+            <label for="node-input-showBorder" style="flex-grow: 1; margin-bottom: unset;">Show border around LED</label>
+            <input type="checkbox" id="node-input-showBorder" style="width: unset;">
+        </div>
+    </div>
+    <div class="form-row" style="display: flex; flex-direction: row; width: 100%;">
+        <div style="flex-grow: 1; display: flex; flex-direction: row;">
+            <label for="node-input-showGlow" style="flex-grow: 1; margin-bottom: unset;">Show glow effect around LED</label>
+            <input type="checkbox" id="node-input-showGlow" style="width: unset;">
+        </div>
+    </div>
+    <h3>Values</h3>
+    <div class="form-row node-input-states-container-row" style="margin-bottom:0px; width:100%; min-width:520px; display: flex; flex-direction: column;">
+        <label style="vertical-align:top; width: 100%;"><i class="fa fa-list-alt"></i> Colors for value of msg.payload</label>
+        <div id="node-input-states-container-div" style="box-sizing:border-box; border-radius:5px; height:257px; padding:5px; border:1px solid var(--red-ui-form-input-border-color, #ccc); overflow-y:scroll; display:inline-block; width: 100%;">
+            <span id="valWarning" style="color: var(--red-ui-text-color-error, #910000)"><b data-i18n="ui-led.errors.unique"></b></span>
+            <ol id="node-input-states-container" style="list-style-type:none; margin:0;"></ol>
+        </div>
+    </div>
+    <div class="form-row">
+        <a href="#" class="editor-button editor-button-small" id="node-input-add-state" style="margin-top:4px;"><i class="fa fa-plus"></i> <span>Color</span></a>
+    </div>
+</script>

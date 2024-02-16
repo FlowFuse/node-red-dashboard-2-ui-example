@@ -1,7 +1,7 @@
 {
-    "name": "@flowfuse/node-red-dashboard-2-ui-example",
+    "name": "@flowfuse/node-red-dashboard-2-ui-led",
     "version": "1.0.0",
-    "description": "A basic example of a third-party node that integrates with Node-RED Dashboard 2.0",
+    "description": "A simple LED status indicator for the Node-RED Dashboard 2.0",
     "keywords": [
         "node-red",
         "node-red-dashboard-2"
@@ -15,15 +15,10 @@
         "name": "Joe Pavitt",
         "url": "https://github.com/joepavitt"
     },
-    "contributors": [
-        {
-            "name": "Pez Cuckow",
-            "url": "https://github.com/pezmc"
-        }
-    ],
+    "contributors": [],
     "exports": {
-        "import": "./resources/ui-example.esm.js",
-        "require": "./resources/ui-example.umd.js"
+        "import": "./resources/ui-led.esm.js",
+        "require": "./resources/ui-led.umd.js"
     },
     "files": [
         "dist/*",
@@ -64,15 +59,15 @@
     "node-red": {
         "version": ">=3.0.0",
         "nodes": {
-            "ui-example": "nodes/ui-example.js"
+            "ui-led": "nodes/ui-led.js"
         }
     },
     "node-red-dashboard-2": {
         "version": "1.0.0",
         "widgets": {
-            "ui-example": {
-                "output": "ui-example.umd.js",
-                "component": "UIExample"
+            "ui-led": {
+                "output": "ui-led.umd.js",
+                "component": "UILed"
             }
         }
     }

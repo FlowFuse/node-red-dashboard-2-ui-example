@@ -1,6 +1,7 @@
 {
-    "ui-example" : {
+    "ui-led" : {
         "label": {
+            "text": "Text",
             "size": "Size"
         }
     }

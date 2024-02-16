@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    function UIExampleNode (config) {
+    function UILedNode (config) {
         RED.nodes.createNode(this, config)
 
         const node = this
@@ -11,25 +11,26 @@ module.exports = function (RED) {
 
         // server-side event handlers
         const evts = {
-            onAction: true,
             onInput: function (msg, send, done) {
                 // store the latest value in our Node-RED datastore
-                base.stores.data.save(node.id, msg)
+                base.stores.data.save(base, node, msg)
+
                 // send it to any connected nodes in Node-RED
                 send(msg)
-            },
-            onSocket: {
-                'my-custom-event': function (conn, id, msg) {
-                    console.info('"my-custom-event" received:', conn.id, id, msg)
-                    console.info('conn.id:', conn.id)
-                    console.info('id:', id)
-                    console.info('msg:', msg)
-                    console.info('node.id:', node.id)
-                    // emit a msg in Node-RED from this node
-                    node.send(msg)
-                }
             }
         }
+
+        // evaluated (server-side) the colour value options, so we can compute which colour to display client-side
+        const evalColors = []
+        config.states.forEach((state) => {
+            const value = RED.util.evaluateNodeProperty(state.value, state.valueType, node)
+            evalColors.push({
+                value,
+                color: state.color
+            })
+        })
+
+        config.evaluated = evalColors
 
         // inform the dashboard UI that we are adding this node
         if (group) {
@@ -39,5 +40,5 @@ module.exports = function (RED) {
         }
     }
 
-    RED.nodes.registerType('ui-example', UIExampleNode)
+    RED.nodes.registerType('ui-led', UILedNode)
 }
