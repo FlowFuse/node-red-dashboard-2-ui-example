@@ -3,7 +3,7 @@
   try {
     if (typeof document != "undefined") {
       var elementStyle = document.createElement("style");
-      elementStyle.appendChild(document.createTextNode(".nrdb-ui-led[data-v-1c9d686c] {\n    --ui-led-border-width: 12px;\n    --ui-led-shadow-width: 12px;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 16px;\n}\n.nrdb-ui-led-label[data-v-1c9d686c] {\n    flex-grow: 1;\n}\n.nrdb-ui-led-bulb[data-v-1c9d686c] {\n    display: block;\n    height: 65%;\n    aspect-ratio: 1 / 1;\n    background-color: var(--ui-led-color);\n    box-shadow: inset #4413138a 0 -1px var(--ui-led-shadow-width) var(--ui-led-shadow-width);\n}\n.nrdb-ui-led-bulb--square[data-v-1c9d686c] {\n    border-radius: 25%;\n}\n.nrdb-ui-led-bulb--circle[data-v-1c9d686c] {\n    border-radius: 50%;\n}\n.nrdb-ui-led-bulb--border[data-v-1c9d686c] {\n    border-width: var(--ui-led-border-width);\n    border-color: #222;\n    border-style: solid;\n}\n.nrdb-ui-led-bulb--glow[data-v-1c9d686c] {\n    box-shadow: 0 0 calc(1.25 * var(--ui-led-border-width)) var(--ui-led-color), inset #44131340 0 -1px var(--ui-led-shadow-width) var(--ui-led-shadow-width);\n}"));
+      elementStyle.appendChild(document.createTextNode(".nrdb-ui-led[data-v-1c9d686c] {\n    --ui-led-border-width: 12px;\n    --ui-led-shadow-width: 12px;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 16px;\n}\n.nrdb-ui-led-label[data-v-1c9d686c] {\n    flex-grow: 1;\n}\n.nrdb-ui-led-bulb[data-v-1c9d686c] {\n    display: block;\n    height: 65%;\n    aspect-ratio: 1 / 1;\n    background-color: var(--ui-led-color);\n    box-shadow: inset #4413138a 0 -1px var(--ui-led-shadow-width) var(--ui-led-shadow-width);\n}\n.nrdb-ui-led-bulb-on[data-v-1c9d686c] {\n    background: radial-gradient(#ffffff96, #ffffff00 70%), var(--ui-led-color);\n}\n.nrdb-ui-led-bulb--square[data-v-1c9d686c] {\n    border-radius: 25%;\n}\n.nrdb-ui-led-bulb--circle[data-v-1c9d686c] {\n    border-radius: 50%;\n}\n.nrdb-ui-led-bulb--border[data-v-1c9d686c] {\n    border-width: var(--ui-led-border-width);\n    border-color: #222;\n    border-style: solid;\n}\n.nrdb-ui-led-bulb--glow[data-v-1c9d686c] {\n    box-shadow: 0 0 calc(1.25 * var(--ui-led-border-width)) var(--ui-led-color), inset #44131340 0 -1px var(--ui-led-shadow-width) var(--ui-led-shadow-width);\n}"));
       document.head.appendChild(elementStyle);
     }
   } catch (e) {
@@ -91,7 +91,7 @@
       "div",
       {
         class: "nrdb-ui-led",
-        style: vue.normalizeStyle(`--ui-led-shadow-width: ${$data.size * 0.1}px; --ui-led-border-width: ${$data.size * 0.1}px; --ui-led-color: ${$options.color}; flex-direction: ${$options.flexDirection}`)
+        style: vue.normalizeStyle(`--ui-led-shadow-width: ${$data.size * 0.1}px; --ui-led-border-width: ${$data.size * 0.15}px; --ui-led-color: ${$options.color}; flex-direction: ${$options.flexDirection}`)
       },
       [
         $props.props.label ? (vue.openBlock(), vue.createElementBlock(
@@ -109,7 +109,7 @@
           "span",
           {
             ref: "led",
-            class: vue.normalizeClass(["nrdb-ui-led-bulb", `nrdb-ui-led-bulb--${$props.props.shape} ${$props.props.showGlow && $options.hasValue ? "nrdb-ui-led-bulb--glow" : ""} ${$props.props.showBorder ? "nrdb-ui-led-bulb--border" : ""}`])
+            class: vue.normalizeClass(["nrdb-ui-led-bulb", `${$options.hasValue ? "nrdb-ui-led-bulb-on" : ""} nrdb-ui-led-bulb--${$props.props.shape} ${$props.props.showGlow && $options.hasValue ? "nrdb-ui-led-bulb--glow" : ""} ${$props.props.showBorder ? "nrdb-ui-led-bulb--border" : ""}`])
           },
           vue.toDisplayString(_ctx.value !== null ? _ctx.value : "No Message Received"),
           3

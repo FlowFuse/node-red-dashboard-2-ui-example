@@ -1,7 +1,7 @@
 <template>
-    <div class="nrdb-ui-led" :style="`--ui-led-shadow-width: ${size * 0.1}px; --ui-led-border-width: ${size * 0.1}px; --ui-led-color: ${color}; flex-direction: ${flexDirection}`">
+    <div class="nrdb-ui-led" :style="`--ui-led-shadow-width: ${size * 0.1}px; --ui-led-border-width: ${size * 0.15}px; --ui-led-color: ${color}; flex-direction: ${flexDirection}`">
         <label v-if="props.label" class="nrdb-ui-led-label v-label" :style="`justify-content: ${labelAlignment}`">{{ props.label }}</label>
-        <span ref="led" class="nrdb-ui-led-bulb" :class="`nrdb-ui-led-bulb--${props.shape} ${props.showGlow && hasValue ? 'nrdb-ui-led-bulb--glow' : ''} ${props.showBorder ? 'nrdb-ui-led-bulb--border' : ''}`">{{ value !== null ? value : 'No Message Received' }}</span>
+        <span ref="led" class="nrdb-ui-led-bulb" :class="`${hasValue ? 'nrdb-ui-led-bulb-on' : ''} nrdb-ui-led-bulb--${props.shape} ${props.showGlow && hasValue ? 'nrdb-ui-led-bulb--glow' : ''} ${props.showBorder ? 'nrdb-ui-led-bulb--border' : ''}`">{{ value !== null ? value : 'No Message Received' }}</span>
     </div>
 </template>
 
@@ -101,6 +101,10 @@ export default {
     aspect-ratio: 1 / 1;
     background-color: var(--ui-led-color);
     box-shadow: inset #4413138a 0 -1px var(--ui-led-shadow-width) var(--ui-led-shadow-width);
+}
+
+.nrdb-ui-led-bulb-on {
+    background: radial-gradient(#ffffff96, #ffffff00 70%), var(--ui-led-color);
 }
 
 .nrdb-ui-led-bulb--square {
