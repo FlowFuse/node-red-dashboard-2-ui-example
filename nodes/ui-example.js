@@ -14,7 +14,7 @@ module.exports = function (RED) {
             onAction: true,
             onInput: function (msg, send, done) {
                 // store the latest value in our Node-RED datastore
-                base.stores.data.save(node.id, msg)
+                base.stores.data.save(base, node, msg)
                 // send it to any connected nodes in Node-RED
                 send(msg)
             },
