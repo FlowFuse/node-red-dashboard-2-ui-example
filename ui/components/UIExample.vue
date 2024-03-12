@@ -170,49 +170,5 @@ export default {
 
 <style scoped>
 /* CSS is auto scoped, but using named classes is still recommended */
-.ui-example-wrapper {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid black;
-}
-
-.ui-example-class {
-    color: red;
-    font-weight: bold;
-}
-
-h1 {
-    margin-bottom: 10px
-}
-
-h2 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-h3 {
-    margin-top: 1rem;
-}
-
-p {
-    margin-bottom: 5px;
-}
-
-ul li {
-   list-style-type: circle;
-   list-style-position: inside;
-   margin-left: 15px;
-}
-
-pre {
-    padding: 12px;
-    margin: 12px;
-    background-color: #eee;
-}
-
-code {
-    font-size: 0.825rem;
-    color: #ae0000;
-}
-
+@import "../stylesheets/ui-example.css";
 </style>
