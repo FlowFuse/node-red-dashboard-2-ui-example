@@ -13,7 +13,7 @@ export default defineConfig({
     plugins: [vue(), cssInjectedByJsPlugin()],
     build: {
         // Generate a source map in dev mode
-        sourcemap: process.env.NODE_ENV === 'development'
+        sourcemap: process.env.NODE_ENV === 'development',
 
         // Configure build as a UMD library
         lib: {
