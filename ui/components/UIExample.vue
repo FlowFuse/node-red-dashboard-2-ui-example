@@ -22,16 +22,26 @@
         <pre>{{ id }}</pre>
 
         <h3><code>this.props</code></h3>
-        <p>The <code>props</code> object contains the properties defined in the widget's configuration in Node-RED.</p>
+        <p>
+            The <code>props</code> object contains the properties defined in the widget's configuration in Node-RED.
+            It is a snapshot of the properties at the time the widget was loaded
+        </p>
         <pre>{{ props }}</pre>
 
         <h3><code>this.state</code></h3>
         <p>
-            The <code>state</code> object contains the current visibility &amp; behavioural state of the widget,
-            including whether it is enabled and visible. This is not yet fully functionality in Dashboard 2.0,
-            but will be expanded in future.
+            The <code>state</code> object contains any properties that have been overridden at runtime (after the node is deployed).
+            Your node should support override of configuration options via <code>msg.ui_update.&lt;property&gt;</code>
         </p>
         <pre>{{ state }}</pre>
+
+        <h2>Dynamic Properties</h2>
+        <p>We have setup a dynamic property <code>example</code> which can be updated from Node-RED.</p>
+        <p>
+            We've wrapped this into a computed variable and used the built-in <code>getProperty()</code>
+            function which automatically checks both <code>props</code> and <code>state</code>.
+        </p>
+        <pre>{{ example }}</pre>
 
         <h2>Communications with Node-RED</h2>
         <p>Events are sent back and forth between Node-RED and Dashboard 2.0 with SocketIO</p>
@@ -84,12 +94,11 @@
 
 <script>
 import toTitleCase from 'to-title-case'
-import { markRaw } from 'vue'
 import { mapState } from 'vuex'
 
 export default {
     name: 'UIExample',
-    inject: ['$socket'],
+    inject: ['$socket', '$dataTracker'],
     props: {
         /* do not remove entries from this - Dashboard's Layout Manager's will pass this data to your component */
         id: { type: String, required: true },
@@ -98,7 +107,6 @@ export default {
     },
     setup (props) {
         console.info('UIExample setup with:', props)
-        console.debug('Vue function loaded correctly', markRaw)
     },
     data () {
         return {
@@ -117,31 +125,16 @@ export default {
         titleCase () {
             return toTitleCase(this.input.title)
         },
-        ...mapState('data', ['messages'])
+        ...mapState('data', ['messages']),
+        // wrap our "example" property in a computed property to ensure it re-calculates when the property changes
+        example () {
+            // use the globally available "getProperty" function
+            return this.getProperty('example')
+        }
     },
-    mounted () {
-        this.$socket.on('widget-load:' + this.id, (msg) => {
-            // load the latest message from the Node-RED datastore when this widget is loaded
-            // storing it in our vuex store so that we have it saved as we navigate around
-            this.$store.commit('data/bind', {
-                widgetId: this.id,
-                msg
-            })
-        })
-        this.$socket.on('msg-input:' + this.id, (msg) => {
-            // store the latest message in our client-side vuex store when we receive a new message
-            this.$store.commit('data/bind', {
-                widgetId: this.id,
-                msg
-            })
-        })
-        // tell Node-RED that we're loading a new instance of this widget
-        this.$socket.emit('widget-load', this.id)
-    },
-    unmounted () {
-        /* Make sure, any events you subscribe to on SocketIO are unsubscribed to here */
-        this.$socket?.off('widget-load:' + this.id)
-        this.$socket?.off('msg-input:' + this.id)
+    created () {
+        // setup our event handlers, and informs Node-RED that this widget has loaded
+        this.$dataTracker(this.id, this.onInput, this.onLoad, this.onDynamicProperties)
     },
     methods: {
         /*
@@ -150,6 +143,41 @@ export default {
         */
         send (msg) {
             this.$socket.emit('widget-action', this.id, msg)
+        },
+        /*
+            (optional) Custom onInput function to handle incoming messages from Node-RED
+        */
+        onInput (msg) {
+            // load the latest message from the Node-RED datastore when this widget is loaded
+            // storing it in our vuex store so that we have it saved as we navigate around
+            this.$store.commit('data/bind', {
+                widgetId: this.id,
+                msg
+            })
+        },
+        /*
+            (optional) Custom onLoad function to handle the loading state of the widget
+            msg   - the latest message from the Node-RED datastore
+            state - The Node-RED config, including any overrides saved to the server-side statestore
+        */
+        onLoad (msg, state) {
+            // loads the last msg received into this node from the Node-RED datastore
+            // state is auto-stored into the widget props, but is available here if you want to do anything else
+        },
+        /*
+            (optional) Custom onDynamicProperties function to handle dynamic properties
+            msg - the latest message from the Node-RED datastore
+        */
+        onDynamicProperties (msg) {
+            // handle any dynamic properties that are sent from Node-RED
+            const updates = msg.ui_update
+            if (!updates) {
+                return
+            }
+            if (typeof updates.example !== 'undefined') {
+                // use the globally available "setDynamicProperties" function to store any updates to this property
+                this.setDynamicProperties({ example: updates.example })
+            }
         },
         alert (text) {
             alert(text)

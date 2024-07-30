@@ -12,6 +12,17 @@ module.exports = function (RED) {
         // server-side event handlers
         const evts = {
             onAction: true,
+            beforeSend: function (msg) {
+                // check for any dynamic properties being set
+                const updates = msg.ui_update
+                if (updates) {
+                    if (typeof updates.example !== 'undefined') {
+                        // save the "example" property in the Node-RED statestore
+                        base.stores.state.set(base, node, msg, 'example', updates.example)
+                    }
+                }
+                return msg
+            },
             onInput: function (msg, send, done) {
                 // store the latest value in our Node-RED datastore
                 base.stores.data.save(base, node, msg)
