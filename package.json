@@ -26,7 +26,6 @@
         "require": "./resources/ui-example.umd.js"
     },
     "files": [
-        "dist/*",
         "nodes/*",
         "ui/*",
         "resources/*"
