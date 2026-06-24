@@ -38,7 +38,7 @@
         "lint": "npm run lint:js && npm run lint:package",
         "lint:fix": "npm run lint:js:fix && npm run lint:package:fix",
         "lint:js": "eslint --ext .js,.vue,.cjs,.mjs .",
-        "lint:js:fix": "yarn lint:js --fix",
+        "lint:js:fix": "npm lint:js -- --fix",
         "lint:package": "sort-package-json --check 'package.json'",
         "lint:package:fix": "sort-package-json 'package.json'"
     },

@@ -24,5 +24,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# No need to include lock file
-package-lock.json
