@@ -59,7 +59,7 @@
         "vite-plugin-static-copy": "^4.1.1"
     },
     "engines": {
-        "node": ">=14"
+        "node": "^22.12.0 || >=24.0.0"
     },
     "node-red": {
         "version": ">=3.0.0",
