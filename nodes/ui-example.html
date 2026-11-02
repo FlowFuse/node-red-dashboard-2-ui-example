@@ -27,7 +27,9 @@
             return this.name || "ui-example";
         },
         oneditprepare: function () {
-            $('#node-input-size').elementSizer({
+            // Use ffElementSizer, falling back to elementSizer for Dashboard 2 versions released before the rename
+            const sizer = $.fn.ffElementSizer ? 'ffElementSizer' : 'elementSizer';
+            $('#node-input-size')[sizer]({
                 width: '#node-input-width',
                 height: '#node-input-height',
                 group: '#node-input-group'
